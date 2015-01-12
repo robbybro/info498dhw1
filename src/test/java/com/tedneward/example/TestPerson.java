@@ -44,23 +44,23 @@ public class TestPerson {
   }
   
   @Test
-  public void exercisePesonEquals() {
+  public void exercisePersonEquals() {
     Person p1 = new Person("Ted", 43, 250000);
     Person p2 = p1;
     assertEquals(p1, p2);
     
     Person p3 = new Person("Ted", 43, 250000);
     assertEquals(p1, p3);
-    
+
     Person p4 = new Person("Ted", 43, 500000);
     assertEquals(p1, p4);
-    
+
     Person p5 = new Person("Ted", 45, 250000);
     assertFalse(p1.equals(p5));
-    
+
     Person p6 = new Person();
     assertFalse(p1.equals(p6));
-    
+
     assertFalse(p1.equals(null));
     assertFalse(p1.equals(new Integer(27)));
   }
@@ -94,11 +94,17 @@ public class TestPerson {
     // ============ YOUR CHANGES BEGIN HERE
     // Call addPropertyChangeListener with a PropertyChangedListener
     // that has the following code in it:
-    /*
-    assertEquals("ssn", pce.getPropertyName());
-    assertEquals("", pce.getOldValue());
-    assertEquals("012-34-5678", pce.getNewValue());
-    */
+
+    PropertyChangeListener p = new PropertyChangeListener() {
+        public void propertyChange(PropertyChangeEvent pce) {
+            assertEquals("ssn", pce.getPropertyName());
+            assertEquals("", pce.getOldValue());
+            assertEquals("012-34-5678", pce.getNewValue());
+
+        }
+    };
+
+    ted.addPropertyChangeListener(p);
 
     // ============ YOUR CHANGES END HERE
     
