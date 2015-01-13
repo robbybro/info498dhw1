@@ -44,7 +44,7 @@ class Point
 	}
 
 	@Override
-	public boolean equals(Object other) {
+	public boolean (Object other) {
 		if (other instanceof Point) {
 			Point p = (Point)other;
 			return p.x == this.x && p.y == this.y;

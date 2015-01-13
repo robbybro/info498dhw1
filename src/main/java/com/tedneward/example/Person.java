@@ -10,8 +10,8 @@ public class Person implements Comparable<Person>{
   private double salary;
   private String ssn;
   private boolean propertyChangeFired = false;
-  
-  public Person() {
+
+    public Person() {
     this("", 0, 0.0d);
   }
   
@@ -20,6 +20,7 @@ public class Person implements Comparable<Person>{
     name = n;
     age = a;
     salary = s;
+    ssn = "";
   }
 
   public int getAge() {
@@ -30,7 +31,11 @@ public class Person implements Comparable<Person>{
       if(age < 0 ) {
           throw new IllegalArgumentException();
       }
+      int old = age;
       this.age = age;
+      pcs.firePropertyChange(new PropertyChangeEvent(this, "age", old, age));
+      propertyChangeFired = true;
+
   }
   
   public String getName() {
@@ -41,23 +46,34 @@ public class Person implements Comparable<Person>{
       if(name == null) {
           throw new IllegalArgumentException();
       }
+      String old = name;
       this.name = name;
+      pcs.firePropertyChange(new PropertyChangeEvent(this, "name", old, name));
+      propertyChangeFired = true;
+
   }
 
   public double getSalary() {
     return salary;
   }
 
-  public void setSalary(double salary) { this.salary = salary; }
+  public void setSalary(double salary) {
+      double old = salary;
+      this.salary = salary;
+      pcs.firePropertyChange(new PropertyChangeEvent(this, "salary", old, salary));
+      propertyChangeFired = true;
+
+  }
 
   public String getSSN() {
-    return ssn;
+    return this.ssn;
   }
-  public void setSSN(String value) {
+
+    public void setSSN(String value) {
     String old = ssn;
     ssn = value;
-    
-    this.pcs.firePropertyChange("ssn", old, value);
+
+    pcs.firePropertyChange(new PropertyChangeEvent(this, "ssn", old, ssn));
     propertyChangeFired = true;
   }
 
@@ -96,9 +112,12 @@ public class Person implements Comparable<Person>{
       return family;
   }
   
-  public boolean equals(Person other) {
-    Person p = other;
-    return (this.name.equals(p.name) && this.age == p.age);
+  public boolean equals(Object other) {
+    if(other instanceof Person) {
+        Person p = (Person) other;
+        return (this.name.equals(p.name) && this.age == p.age);
+    }
+    return false;
   }
 
   // sort by salary desc
@@ -132,40 +151,5 @@ public class Person implements Comparable<Person>{
   }
   public void removePropertyChangeListener(PropertyChangeListener listener) {
       this.pcs.removePropertyChangeListener(listener);
-  }
-
-  public static void main(String[] args) {
-//      Person p = new Person();
-//      p.setAge(20);
-//      p.setName("Fird Birfle");
-//      p.setSalary(195750.22);
-//      System.out.println(p.toString());
-
-//      Person p1 = new Person("Ted", 43, 250000);
-//      Person p2 = p1;
-//      System.out.println("true: " + p1.equals(p2));
-//
-//      Person p3 = new Person("Ted", 43, 250000);
-//      System.out.println("true: " + p1.equals(p3));
-////
-//      Person p4 = new Person("Ted", 43, 500000);
-//      System.out.println("true: " + p1.equals(p4));
-////
-//      Person p5 = new Person("Ted", 45, 250000);
-//      System.out.println("false: " + p1.equals(p5));
-////
-//      Person p6 = new Person();
-//      System.out.println("false: " + p1.equals(p6));
-////
-//      System.out.println("false: " + p1.equals(false));
-//      System.out.println("false: " + p1.equals(new Integer(27)));'
-
-      List<Person> people = Person.getNewardFamily();
-      Collections.sort(people, new Person.AgeComparator());
-
-      // should be matthew michael, ted, charlotte
-      for(Person person : people) {
-          System.out.println(person.toString());
-      }
   }
 }
